@@ -9,7 +9,7 @@ day_scrape <- function(import_db, stats_db, backdays) {
   
   Firstdate <- Sys.Date()-backdays
   
-  ### Get List of pitchers who pitched yesterday.
+  ### Get List of pitchers who pitched since test date.
   query <- paste0("SELECT pitcher FROM ############ where gamedate >='",Firstdate,"' group by pitcher")
   rs = dbSendQuery(import_db, query)
   pitchers_to_get = fetch(rs, n=-1)
