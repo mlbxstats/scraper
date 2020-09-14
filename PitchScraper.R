@@ -9,6 +9,7 @@ day_scrape <- function(import_db, stats_db, backdays) {
   
   Firstdate <- Sys.Date()-backdays
   
+  ### Get List of pitchers who pitched yesterday.
   query <- paste0("SELECT pitcher FROM ############ where gamedate >='",Firstdate,"' group by pitcher")
   rs = dbSendQuery(import_db, query)
   pitchers_to_get = fetch(rs, n=-1)
@@ -60,12 +61,15 @@ day_scrape <- function(import_db, stats_db, backdays) {
 
 build <- function(import_db, stats_db) {
 
-  rs1 = dbSendQuery(stats_db, "SELECT pitcher FROM xstats.pitches_data group by pitcher")
+  ### Get List of pitchers already downloaded.
+  rs1 = dbSendQuery(stats_db, "SELECT pitcher FROM ############ group by pitcher")
   pitchers_had = fetch(rs1, n=-1)
   
-  rs = dbSendQuery(import_db, "SELECT pitcher FROM import.api_scrape2 group by pitcher")
+  ### Get List of all pitchers.
+  rs = dbSendQuery(import_db, "SELECT pitcher FROM ############ group by pitcher")
   pitchers_all = fetch(rs, n=-1)
   
+  ### Make list of pitchers excluding those already downloaded
   pitchers_to_get <- as.data.frame(pitchers_all$pitcher[!pitchers_all$pitcher %in% pitchers_had$pitcher])
   colnames(pitchers_to_get) <- c("pitcher")
   
